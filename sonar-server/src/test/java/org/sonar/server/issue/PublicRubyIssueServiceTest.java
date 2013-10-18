@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
+import org.sonar.api.config.Settings;
 import org.sonar.api.issue.IssueFinder;
 import org.sonar.api.issue.IssueQuery;
 import org.sonar.api.rule.RuleKey;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.*;
 public class PublicRubyIssueServiceTest {
 
   IssueFinder finder = mock(IssueFinder.class);
-  PublicRubyIssueService facade = new PublicRubyIssueService(finder);
+  PublicRubyIssueService facade = new PublicRubyIssueService(finder, new Settings());
 
   @Test
   public void find_by_issue_keys() throws Exception {
@@ -89,7 +90,7 @@ public class PublicRubyIssueServiceTest {
     map.put("sort", "CREATION_DATE");
     map.put("asc", true);
 
-    IssueQuery query = new PublicRubyIssueService(finder).toQuery(map);
+    IssueQuery query = facade.toQuery(map);
     assertThat(query.issueKeys()).containsOnly("ABCDE1234");
     assertThat(query.severities()).containsOnly("MAJOR", "MINOR");
     assertThat(query.statuses()).containsOnly("CLOSED");

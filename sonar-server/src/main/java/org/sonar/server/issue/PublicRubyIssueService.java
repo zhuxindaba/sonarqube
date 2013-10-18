@@ -24,6 +24,8 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.config.Settings;
 import org.sonar.api.issue.IssueFinder;
 import org.sonar.api.issue.IssueQuery;
 import org.sonar.api.issue.IssueQueryResult;
@@ -33,7 +35,6 @@ import org.sonar.api.web.UserRole;
 import org.sonar.server.util.RubyUtils;
 
 import javax.annotation.Nullable;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -46,10 +47,13 @@ import java.util.Map;
  */
 public class PublicRubyIssueService implements RubyIssueService {
 
+  public static final String PROPERTY_DISABLE_SEVERITY_CRITERIA = "sonar.disableIssueFilterBySeverity";
   private final IssueFinder finder;
+  private final Settings settings;
 
-  public PublicRubyIssueService(IssueFinder f) {
+  public PublicRubyIssueService(IssueFinder f, Settings settings) {
     this.finder = f;
+    this.settings = settings;
   }
 
   /**
@@ -72,11 +76,10 @@ public class PublicRubyIssueService implements RubyIssueService {
     return finder.find(toQuery(params));
   }
 
-  static IssueQuery toQuery(Map<String, Object> props) {
+  IssueQuery toQuery(Map<String, Object> props) {
     IssueQuery.Builder builder = IssueQuery.builder()
       .requiredRole(UserRole.USER)
       .issueKeys(RubyUtils.toStrings(props.get(IssueFilterParameters.ISSUES)))
-      .severities(RubyUtils.toStrings(props.get(IssueFilterParameters.SEVERITIES)))
       .statuses(RubyUtils.toStrings(props.get(IssueFilterParameters.STATUSES)))
       .resolutions(RubyUtils.toStrings(props.get(IssueFilterParameters.RESOLUTIONS)))
       .resolved(RubyUtils.toBoolean(props.get(IssueFilterParameters.RESOLVED)))
@@ -93,6 +96,10 @@ public class PublicRubyIssueService implements RubyIssueService {
       .createdBefore(RubyUtils.toDate(props.get(IssueFilterParameters.CREATED_BEFORE)))
       .pageSize(RubyUtils.toInteger(props.get(IssueFilterParameters.PAGE_SIZE)))
       .pageIndex(RubyUtils.toInteger(props.get(IssueFilterParameters.PAGE_INDEX)));
+    // HOT FIX - experimental deactivation of severity criteria
+    if (!settings.getBoolean(PROPERTY_DISABLE_SEVERITY_CRITERIA)) {
+      builder.severities(RubyUtils.toStrings(props.get(IssueFilterParameters.SEVERITIES)));
+    }
     String sort = (String) props.get(IssueFilterParameters.SORT);
     if (!Strings.isNullOrEmpty(sort)) {
       builder.sort(sort);
@@ -127,5 +134,8 @@ public class PublicRubyIssueService implements RubyIssueService {
 
   public void start() {
     // used to force pico to instantiate the singleton at startup
+    if (settings.getBoolean(PROPERTY_DISABLE_SEVERITY_CRITERIA)) {
+      LoggerFactory.getLogger(PublicRubyIssueService.class).warn("Searching for issues by severity is disabled. See property " + PROPERTY_DISABLE_SEVERITY_CRITERIA + ".");
+    }
   }
 }

@@ -81,12 +81,14 @@ public class InternalRubyIssueService implements ServerComponent {
   private final ActionService actionService;
   private final IssueFilterService issueFilterService;
   private final IssueBulkChangeService issueBulkChangeService;
+  private final PublicRubyIssueService publicRubyIssueService;
 
   public InternalRubyIssueService(IssueService issueService,
                                   IssueCommentService commentService,
                                   IssueChangelogService changelogService, ActionPlanService actionPlanService,
                                   IssueStatsFinder issueStatsFinder, ResourceDao resourceDao, ActionService actionService,
-                                  IssueFilterService issueFilterService, IssueBulkChangeService issueBulkChangeService) {
+                                  IssueFilterService issueFilterService, IssueBulkChangeService issueBulkChangeService,
+                                  PublicRubyIssueService publicRubyIssueService) {
     this.issueService = issueService;
     this.commentService = commentService;
     this.changelogService = changelogService;
@@ -96,10 +98,11 @@ public class InternalRubyIssueService implements ServerComponent {
     this.actionService = actionService;
     this.issueFilterService = issueFilterService;
     this.issueBulkChangeService = issueBulkChangeService;
+    this.publicRubyIssueService = publicRubyIssueService;
   }
 
   public IssueStatsFinder.IssueStatsResult findIssueAssignees(Map<String, Object> params) {
-    return issueStatsFinder.findIssueAssignees(PublicRubyIssueService.toQuery(params));
+    return issueStatsFinder.findIssueAssignees(publicRubyIssueService.toQuery(params));
   }
 
   public List<Transition> listTransitions(String issueKey) {
@@ -396,7 +399,7 @@ public class InternalRubyIssueService implements ServerComponent {
   }
 
   public IssueQuery emptyIssueQuery() {
-    return PublicRubyIssueService.toQuery(Maps.<String, Object>newHashMap());
+    return publicRubyIssueService.toQuery(Maps.<String, Object>newHashMap());
   }
 
   @CheckForNull
@@ -452,7 +455,7 @@ public class InternalRubyIssueService implements ServerComponent {
    * Execute issue filter from parameters
    */
   public IssueFilterResult execute(Map<String, Object> props) {
-    IssueQuery issueQuery = PublicRubyIssueService.toQuery(props);
+    IssueQuery issueQuery = publicRubyIssueService.toQuery(props);
     return issueFilterService.execute(issueQuery);
   }
 
@@ -463,7 +466,7 @@ public class InternalRubyIssueService implements ServerComponent {
     DefaultIssueFilter issueFilter = issueFilterService.find(issueFilterId, UserSession.get());
     Map<String, Object> props = issueFilterService.deserializeIssueFilterQuery(issueFilter);
     overrideProps(props, overrideProps);
-    IssueQuery issueQuery = PublicRubyIssueService.toQuery(props);
+    IssueQuery issueQuery = publicRubyIssueService.toQuery(props);
     return issueFilterService.execute(issueQuery);
   }
 
