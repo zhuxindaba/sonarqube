@@ -23,6 +23,49 @@
     WHERE gr.group_id IS NULL
   </select>
 
+  <select id="selectUserPermissionsForResourceId" parameterType="map" resultType="String">
+    SELECT ur.role
+    FROM user_roles ur
+    INNER JOIN users u ON u.id=ur.user_id AND u.active=${_true}
+    <where>
+      AND u.login = #{userLogin}
+      <choose>
+        <when test="resourceId != null">
+          AND resource_id=#{resourceId}
+        </when>
+        <otherwise>
+          AND resource_id IS NULL
+        </otherwise>
+      </choose>
+    </where>
+  </select>
+
+  <select id="selectGroupPermissionsForResourceId" parameterType="map" resultType="String">
+    SELECT gr.role
+    FROM group_roles gr
+    <if test="isAnyOneGroup != true">
+      INNER JOIN groups g ON g.id = gr.group_id
+    </if>
+    <where>
+      <choose>
+        <when test="isAnyOneGroup != true">
+          AND g.name = #{groupName}
+        </when>
+        <otherwise>
+          AND gr.group_id IS NULL
+        </otherwise>
+      </choose>
+      <choose>
+        <when test="resourceId != null">
+          AND resource_id=#{resourceId}
+        </when>
+        <otherwise>
+          AND resource_id IS NULL
+        </otherwise>
+      </choose>
+    </where>
+  </select>
+
   <insert id="insertGroupRole" parameterType="GroupRole" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO group_roles (group_id, resource_id, role)
     VALUES (#{groupId}, #{resourceId}, #{role})

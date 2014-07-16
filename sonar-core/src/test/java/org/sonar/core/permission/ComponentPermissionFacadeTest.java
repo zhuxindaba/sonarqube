@@ -57,10 +57,18 @@ public class ComponentPermissionFacadeTest extends AbstractDaoTestCase {
   public void should_apply_permission_template() throws Exception {
     setupData("should_apply_permission_template");
 
+    assertThat(roleDao.selectGroupPermissionsForResourceId("sonar-administrators", 123L)).isEmpty();
+    assertThat(roleDao.selectGroupPermissionsForResourceId("sonar-users", 123L)).isEmpty();
+    assertThat(roleDao.selectGroupPermissionsForResourceId("Anyone", 123L)).isEmpty();
+    assertThat(roleDao.selectUserPermissionsForResourceId("marius", 123L)).isEmpty();
+
     permissionFacade.applyPermissionTemplate("default_20130101_010203", 123L);
 
-    checkTable("should_apply_permission_template", "group_roles", "group_id", "resource_id", "role");
-    checkTable("should_apply_permission_template", "user_roles", "group_id", "resource_id", "role");
+    assertThat(roleDao.selectGroupPermissionsForResourceId("sonar-administrators", 123L)).containsOnly("admin");
+    assertThat(roleDao.selectGroupPermissionsForResourceId("sonar-users", 123L)).containsOnly("user", "codeviewer");
+    assertThat(roleDao.selectGroupPermissionsForResourceId("Anyone", 123L)).containsOnly("user", "codeviewer");
+
+    assertThat(roleDao.selectUserPermissionsForResourceId("marius", 123L)).containsOnly("admin");
   }
 
   @Test

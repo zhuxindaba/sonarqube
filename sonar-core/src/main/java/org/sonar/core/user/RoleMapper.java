@@ -34,6 +34,17 @@ public interface RoleMapper {
 
   List<String> selectGroupPermissions(String groupName);
 
+  /**
+   * @return permissions from a user
+   */
+  List<String> selectUserPermissionsForResourceId(@Param("userLogin") String userLogin, @Nullable @Param("resourceId") Long resourceId);
+
+  /**
+   * @return permissions from to a group
+   */
+  List<String> selectGroupPermissionsForResourceId(@Param("groupName") String groupName, @Nullable @Param("resourceId") Long resourceId, @Param("isAnyOneGroup") Boolean isAnyOneGroup);
+
+
   void insertGroupRole(GroupRoleDto groupRole);
 
   void insertUserRole(UserRoleDto userRole);

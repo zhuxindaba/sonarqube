@@ -22,8 +22,11 @@ package org.sonar.core.user;
 
 import org.apache.ibatis.session.SqlSession;
 import org.sonar.api.ServerComponent;
+import org.sonar.api.security.DefaultGroups;
 import org.sonar.api.task.TaskComponent;
 import org.sonar.core.persistence.MyBatis;
+
+import javax.annotation.Nullable;
 
 import java.util.List;
 
@@ -50,6 +53,26 @@ public class RoleDao implements TaskComponent, ServerComponent {
     RoleMapper mapper = session.getMapper(RoleMapper.class);
     try {
       return mapper.selectGroupPermissions(groupName);
+    } finally {
+      MyBatis.closeQuietly(session);
+    }
+  }
+
+  public List<String> selectUserPermissionsForResourceId(String userLogin, @Nullable Long resourceId) {
+    SqlSession session = mybatis.openSession();
+    RoleMapper mapper = session.getMapper(RoleMapper.class);
+    try {
+      return mapper.selectUserPermissionsForResourceId(userLogin, resourceId);
+    } finally {
+      MyBatis.closeQuietly(session);
+    }
+  }
+
+  public List<String> selectGroupPermissionsForResourceId(String groupName, @Nullable Long resourceId) {
+    SqlSession session = mybatis.openSession();
+    RoleMapper mapper = session.getMapper(RoleMapper.class);
+    try {
+      return mapper.selectGroupPermissionsForResourceId(groupName, resourceId, DefaultGroups.isAnyone(groupName));
     } finally {
       MyBatis.closeQuietly(session);
     }
