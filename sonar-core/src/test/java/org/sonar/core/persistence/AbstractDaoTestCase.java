@@ -70,6 +70,10 @@ public abstract class AbstractDaoTestCase {
       super(dataSource);
     }
 
+    public MyDBTester(DataSource dataSource, String schema) {
+      super(dataSource, schema);
+    }
+
     @Override
     public void closeConnection(IDatabaseConnection connection) throws Exception {
 
@@ -103,7 +107,13 @@ public abstract class AbstractDaoTestCase {
       LOG.info("Test Database: " + database);
 
       databaseCommands = DatabaseCommands.forDialect(database.getDialect());
-      databaseTester = new MyDBTester(database.getDataSource());
+
+      boolean hasSchema = settings.hasKey("sonar.jdbc.schema");
+      if (hasSchema) {
+        databaseTester = new MyDBTester(database.getDataSource(), settings.getString("sonar.jdbc.schema"));
+      } else {
+        databaseTester = new MyDBTester(database.getDataSource());
+      }
 
       myBatis = new MyBatis(database, settings, new Logback());
       myBatis.start();
