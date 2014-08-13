@@ -45,8 +45,6 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.config.Settings;
-import org.sonar.core.cluster.NullQueue;
-import org.sonar.core.cluster.WorkQueue;
 import org.sonar.core.config.Logback;
 import org.sonar.core.persistence.dialect.MySql;
 
@@ -122,7 +120,7 @@ public abstract class AbstractDaoTestCase {
     }
 
 
-    if (connection == null) {
+    if (connection == null || connection.getConnection().isClosed()) {
       connection = databaseTester.getConnection();
       connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, databaseCommands.getDbUnitFactory());
       if (MySql.ID.equals(database.getDialect().getId())) {
@@ -291,6 +289,6 @@ public abstract class AbstractDaoTestCase {
   }
 
   protected Connection getConnection() throws SQLException {
-    return connection.getConnection();
+    return database.getDataSource().getConnection();
   }
 }
