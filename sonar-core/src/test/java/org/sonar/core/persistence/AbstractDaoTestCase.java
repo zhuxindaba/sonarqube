@@ -88,48 +88,57 @@ public abstract class AbstractDaoTestCase {
   private static IDatabaseConnection connection;
 
   @Before
-  public void startDatabase() throws Exception {
-    if (database == null) {
-      Settings settings = new Settings().setProperties(Maps.fromProperties(System.getProperties()));
-      if (settings.hasKey("orchestrator.configUrl")) {
-        loadOrchestratorSettings(settings);
-      }
-      for (String key : settings.getKeysStartingWith("sonar.jdbc")) {
-        LOG.info(key + ": " + settings.getString(key));
-      }
-      boolean hasDialect = settings.hasKey("sonar.jdbc.dialect");
-      if (hasDialect) {
-        database = new DefaultDatabase(settings);
-      } else {
-        database = new H2Database("h2Tests", true);
-      }
-      database.start();
-      LOG.info("Test Database: " + database);
+  public void startDatabase() {
+    try {
+      if (database == null) {
+        Settings settings = new Settings().setProperties(Maps.fromProperties(System.getProperties()));
 
-      databaseCommands = DatabaseCommands.forDialect(database.getDialect());
+        System.out.println("settings.getString(\"sonar.jdbc.schema\") = " + settings.getString("sonar.jdbc.schema"));
+        System.out.println("settings.getString(\"sonar.jdbc.username\") = " + settings.getString("sonar.jdbc.username"));
+        System.out.println("settings.getString(\"sonar.jdbc.password\") = " + settings.getString("sonar.jdbc.password"));
 
-      boolean hasSchema = settings.hasKey("sonar.jdbc.schema");
-      if (hasSchema) {
-        databaseTester = new MyDBTester(database.getDataSource(), settings.getString("sonar.jdbc.schema"));
-      } else {
-        databaseTester = new MyDBTester(database.getDataSource());
+        if (settings.hasKey("orchestrator.configUrl")) {
+          loadOrchestratorSettings(settings);
+        }
+        for (String key : settings.getKeysStartingWith("sonar.jdbc")) {
+          LOG.info(key + ": " + settings.getString(key));
+        }
+        boolean hasDialect = settings.hasKey("sonar.jdbc.dialect");
+        if (hasDialect) {
+          database = new DefaultDatabase(settings);
+        } else {
+          database = new H2Database("h2Tests", true);
+        }
+        database.start();
+        LOG.info("Test Database: " + database);
+
+        databaseCommands = DatabaseCommands.forDialect(database.getDialect());
+
+        boolean hasSchema = settings.hasKey("sonar.jdbc.schema");
+        if (hasSchema) {
+          databaseTester = new MyDBTester(database.getDataSource(), settings.getString("sonar.jdbc.schema"));
+        } else {
+          databaseTester = new MyDBTester(database.getDataSource());
+        }
+
+        myBatis = new MyBatis(database, settings, new Logback());
+        myBatis.start();
       }
 
-      myBatis = new MyBatis(database, settings, new Logback());
-      myBatis.start();
+
+      if (connection == null || connection.getConnection().isClosed()) {
+        connection = databaseTester.getConnection();
+        connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, databaseCommands.getDbUnitFactory());
+        if (MySql.ID.equals(database.getDialect().getId())) {
+          connection.getConfig().setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
+          connection.getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
+        }
+      }
+
+      databaseCommands.truncateDatabase(database.getDataSource());
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-
-
-    if (connection == null || connection.getConnection().isClosed()) {
-      connection = databaseTester.getConnection();
-      connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, databaseCommands.getDbUnitFactory());
-      if (MySql.ID.equals(database.getDialect().getId())) {
-        connection.getConfig().setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
-        connection.getConfig().setProperty(DatabaseConfig.PROPERTY_METADATA_HANDLER, new MySqlMetadataHandler());
-      }
-    }
-
-    databaseCommands.truncateDatabase(database.getDataSource());
   }
 
   private void loadOrchestratorSettings(Settings settings) throws URISyntaxException, IOException {
