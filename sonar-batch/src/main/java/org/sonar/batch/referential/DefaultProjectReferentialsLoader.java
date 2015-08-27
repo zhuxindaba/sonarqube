@@ -33,6 +33,7 @@ public class DefaultProjectReferentialsLoader implements ProjectReferentialsLoad
   private static final Logger LOG = LoggerFactory.getLogger(DefaultProjectReferentialsLoader.class);
 
   private static final String BATCH_PROJECT_URL = "/batch/project";
+  private static final int TIMEOUT_MS = 60000;
 
   private final ServerClient serverClient;
   private final AnalysisMode analysisMode;
@@ -51,6 +52,7 @@ public class DefaultProjectReferentialsLoader implements ProjectReferentialsLoad
       url += "&profile=" + ServerClient.encodeForUrl(taskProperties.properties().get(ModuleQProfiles.SONAR_PROFILE_PROP));
     }
     url += "&preview=" + analysisMode.isPreview();
-    return ProjectReferentials.fromJson(serverClient.request(url));
+    LOG.debug(String.format("Request %s [timeout=%d ms]", url, TIMEOUT_MS));
+    return ProjectReferentials.fromJson(serverClient.request(url, true, TIMEOUT_MS));
   }
 }

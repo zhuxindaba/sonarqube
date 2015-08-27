@@ -19,12 +19,17 @@
  */
 package org.sonar.batch.referential;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.batch.bootstrap.ServerClient;
 import org.sonar.batch.protocol.input.GlobalReferentials;
 
 public class DefaultGlobalReferentialsLoader implements GlobalReferentialsLoader {
 
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultGlobalReferentialsLoader.class);
+
   private static final String BATCH_GLOBAL_URL = "/batch/global";
+  private static final int TIMEOUT_MS = 60000;
 
   private final ServerClient serverClient;
 
@@ -34,7 +39,8 @@ public class DefaultGlobalReferentialsLoader implements GlobalReferentialsLoader
 
   @Override
   public GlobalReferentials load() {
-    return GlobalReferentials.fromJson(serverClient.request(BATCH_GLOBAL_URL));
+    LOG.debug(String.format("Request %s [timeout=%d ms]", BATCH_GLOBAL_URL, TIMEOUT_MS));
+    return GlobalReferentials.fromJson(serverClient.request(BATCH_GLOBAL_URL, true, TIMEOUT_MS));
   }
 
 }

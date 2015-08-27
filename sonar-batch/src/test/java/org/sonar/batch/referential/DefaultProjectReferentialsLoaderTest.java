@@ -56,18 +56,18 @@ public class DefaultProjectReferentialsLoaderTest {
   public void passPreviewParameter() {
     when(analysisMode.isPreview()).thenReturn(false);
     loader.load(reactor, taskProperties);
-    verify(serverClient).request("/batch/project?key=foo&preview=false");
+    verify(serverClient).request("/batch/project?key=foo&preview=false", true, 60000);
 
     when(analysisMode.isPreview()).thenReturn(true);
     loader.load(reactor, taskProperties);
-    verify(serverClient).request("/batch/project?key=foo&preview=true");
+    verify(serverClient).request("/batch/project?key=foo&preview=true", true, 60000);
   }
 
   @Test
   public void passProfileParameter() {
     taskProperties.properties().put(ModuleQProfiles.SONAR_PROFILE_PROP, "my-profile");
     loader.load(reactor, taskProperties);
-    verify(serverClient).request("/batch/project?key=foo&profile=my-profile&preview=false");
+    verify(serverClient).request("/batch/project?key=foo&profile=my-profile&preview=false", true, 60000);
   }
 
 }
