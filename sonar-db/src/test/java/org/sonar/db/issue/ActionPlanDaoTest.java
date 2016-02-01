@@ -43,8 +43,6 @@ public class ActionPlanDaoTest {
 
   @Test
   public void should_insert_new_action_plan() {
-    dbTester.truncateTables();
-
     ActionPlanDto actionPlanDto = new ActionPlanDto().setKey("ABC").setName("Long term").setDescription("Long term action plan").setStatus("OPEN")
       .setProjectId(1l).setUserLogin("arthur");
 

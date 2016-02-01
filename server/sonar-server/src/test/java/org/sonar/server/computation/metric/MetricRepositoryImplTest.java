@@ -44,11 +44,6 @@ public class MetricRepositoryImplTest {
   private DbClient dbClient = dbTester.getDbClient();
   private MetricRepositoryImpl underTest = new MetricRepositoryImpl(dbClient);
 
-  @Before
-  public void setUp() {
-    dbTester.truncateTables();
-  }
-
   @Test(expected = NullPointerException.class)
   public void getByKey_throws_NPE_if_arg_is_null() {
     underTest.getByKey(null);

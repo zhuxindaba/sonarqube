@@ -19,7 +19,6 @@
  */
 package org.sonar.db.issue;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -32,11 +31,6 @@ public class IssueChangeMapperTest {
 
   @Rule
   public DbTester dbTester = DbTester.create(System2.INSTANCE);
-
-  @Before
-  public void setUp() {
-    dbTester.truncateTables();
-  }
 
   @Test
   public void insert_diff() {
@@ -52,7 +46,7 @@ public class IssueChangeMapperTest {
     dbTester.getSession().getMapper(IssueChangeMapper.class).insert(dto);
     dbTester.getSession().commit();
 
-    dbTester.assertDbUnit(getClass(), "insert_diff-result.xml", new String[]{"id"}, "issue_changes");
+    dbTester.assertDbUnit(getClass(), "insert_diff-result.xml", new String[] {"id"}, "issue_changes");
   }
 
   @Test
@@ -68,6 +62,6 @@ public class IssueChangeMapperTest {
     dbTester.getSession().getMapper(IssueChangeMapper.class).insert(dto);
     dbTester.getSession().commit();
 
-    dbTester.assertDbUnit(getClass(), "insert_comment-result.xml", new String[]{"id"}, "issue_changes");
+    dbTester.assertDbUnit(getClass(), "insert_comment-result.xml", new String[] {"id"}, "issue_changes");
   }
 }

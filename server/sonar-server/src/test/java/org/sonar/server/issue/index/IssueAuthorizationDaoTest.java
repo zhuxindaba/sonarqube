@@ -40,11 +40,6 @@ public class IssueAuthorizationDaoTest {
 
   IssueAuthorizationDao dao = new IssueAuthorizationDao();
 
-  @Before
-  public void setUp() {
-    dbTester.truncateTables();
-  }
-
   @Test
   public void select_all() {
     dbTester.prepareDbUnit(getClass(), "shared.xml");

@@ -71,7 +71,6 @@ public class DeleteActionTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     qualityProfileDao = new QualityProfileDao(dbTester.myBatis(), mock(System2.class));
     componentDao = new ComponentDao();
 

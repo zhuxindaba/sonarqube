@@ -81,7 +81,6 @@ public class IssuesActionTest {
 
   @Before
   public void before() {
-    db.truncateTables();
     es.truncateIndices();
 
     issueIndex = new IssueIndex(es.client(), System2.INSTANCE, userSessionRule);

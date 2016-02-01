@@ -116,7 +116,6 @@ public class BulkDeleteActionTest {
         dbClient,
         userSessionRule)));
     userSessionRule.setGlobalPermissions(GlobalPermissions.SYSTEM_ADMIN);
-    db.truncateTables();
     es.truncateIndices();
   }
 

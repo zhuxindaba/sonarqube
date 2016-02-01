@@ -46,7 +46,6 @@ public class IssueIndexerTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     esTester.truncateIndices();
   }
 

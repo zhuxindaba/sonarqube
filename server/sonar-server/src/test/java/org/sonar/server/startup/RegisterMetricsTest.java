@@ -123,8 +123,6 @@ public class RegisterMetricsTest {
 
   @Test
   public void insert_core_metrics() {
-    dbTester.truncateTables();
-
     RegisterMetrics register = new RegisterMetrics(dbClient);
     register.start();
 

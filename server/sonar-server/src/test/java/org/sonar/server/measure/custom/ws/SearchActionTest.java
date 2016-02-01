@@ -98,7 +98,6 @@ public class SearchActionTest {
   public void setUp() {
     dbClient = new DbClient(db.database(), db.myBatis(), new CustomMeasureDao(), new ComponentDao(), new MetricDao(), new SnapshotDao());
     dbSession = dbClient.openSession(false);
-    db.truncateTables();
     CustomMeasureJsonWriter customMeasureJsonWriter = new CustomMeasureJsonWriter(new UserJsonWriter(userSessionRule));
     UserIndex userIndex = new UserIndex(es.client());
     ws = new WsTester(new CustomMeasuresWs(new SearchAction(dbClient, userIndex, customMeasureJsonWriter, userSessionRule, new ComponentFinder(dbClient))));

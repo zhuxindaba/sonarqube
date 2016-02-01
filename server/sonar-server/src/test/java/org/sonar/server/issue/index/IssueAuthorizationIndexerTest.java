@@ -48,7 +48,6 @@ public class IssueAuthorizationIndexerTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     esTester.truncateIndices();
   }
 

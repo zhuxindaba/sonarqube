@@ -75,7 +75,6 @@ public class ChangelogActionTest {
 
   @Before
   public void before() {
-    dbTester.truncateTables();
     esTester.truncateIndices();
 
     System2 system = mock(System2.class);

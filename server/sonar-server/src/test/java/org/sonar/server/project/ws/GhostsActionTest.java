@@ -58,7 +58,6 @@ public class GhostsActionTest {
   @Before
   public void setUp() {
     ws = new WsTester(new ProjectsWs(new GhostsAction(dbClient, userSessionRule)));
-    db.truncateTables();
   }
 
   @Test

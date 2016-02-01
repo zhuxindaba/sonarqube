@@ -64,7 +64,6 @@ public class ProvisionedActionTest {
   @Before
   public void setUp() {
     componentDao = dbClient.componentDao();
-    db.truncateTables();
     ws = new WsTester(new ProjectsWs(new ProvisionedAction(dbClient, userSessionRule)));
   }
 

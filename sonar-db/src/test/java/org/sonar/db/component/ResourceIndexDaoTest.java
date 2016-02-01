@@ -39,11 +39,6 @@ public class ResourceIndexDaoTest {
 
   ResourceIndexDao dao = dbTester.getDbClient().componentIndexDao();
 
-  @Before
-  public void setUp() throws Exception {
-    dbTester.truncateTables();
-  }
-
   @Test
   public void shouldIndexResource() {
     dbTester.prepareDbUnit(getClass(), "shouldIndexResource.xml");

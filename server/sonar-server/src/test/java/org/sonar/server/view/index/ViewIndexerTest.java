@@ -76,7 +76,6 @@ public class ViewIndexerTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     esTester.truncateIndices();
   }
 

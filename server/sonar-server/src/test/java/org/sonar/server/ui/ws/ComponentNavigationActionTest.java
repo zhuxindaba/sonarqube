@@ -79,8 +79,6 @@ public class ComponentNavigationActionTest {
 
   @Before
   public void before() {
-    dbTester.truncateTables();
-
     i18n = mock(I18n.class);
     when(i18n.message(any(Locale.class), any(String.class), any(String.class)))
       .thenAnswer(new Answer<String>() {

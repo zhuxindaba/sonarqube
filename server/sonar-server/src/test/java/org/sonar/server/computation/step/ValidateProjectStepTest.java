@@ -71,11 +71,6 @@ public class ValidateProjectStepTest {
 
   ValidateProjectStep underTest = new ValidateProjectStep(dbClient, reportReader, treeRootHolder, analysisMetadataHolder);
 
-  @Before
-  public void setUp() {
-    dbTester.truncateTables();
-  }
-
   @Test
   public void not_fail_on_valid_branch() {
     analysisMetadataHolder.setBranch(DEFAULT_BRANCH);

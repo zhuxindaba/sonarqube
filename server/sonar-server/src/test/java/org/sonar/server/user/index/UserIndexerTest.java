@@ -45,7 +45,6 @@ public class UserIndexerTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     esTester.truncateIndices();
   }
 

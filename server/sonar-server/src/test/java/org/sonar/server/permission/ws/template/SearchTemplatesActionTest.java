@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.Nullable;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -65,8 +64,8 @@ import static org.sonar.test.JsonAssert.assertJson;
 
 @Category(DbTests.class)
 public class SearchTemplatesActionTest {
-  @ClassRule
-  public static DbTester db = DbTester.create(System2.INSTANCE);
+  @Rule
+  public DbTester db = DbTester.create(System2.INSTANCE);
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
   @Rule
@@ -83,7 +82,6 @@ public class SearchTemplatesActionTest {
 
   @Before
   public void setUp() {
-    db.truncateTables();
     i18n.setProjectPermissions();
     when(resourceTypes.getRoots()).thenReturn(rootResourceTypes());
 

@@ -91,7 +91,6 @@ public class ViewsComputeMeasureVariationsStepTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     dbClient.componentDao().insert(session, VIEW_DTO);
     session.commit();
 

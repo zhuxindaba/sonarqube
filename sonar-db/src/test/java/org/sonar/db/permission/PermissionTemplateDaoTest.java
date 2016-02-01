@@ -229,8 +229,6 @@ public class PermissionTemplateDaoTest {
 
   @Test
   public void should_retrieve_permission_template() {
-    db.truncateTables();
-
     PermissionTemplateDto permissionTemplateDto = new PermissionTemplateDto().setName("Test template").setUuid("test_template");
     PermissionTemplateDto templateWithPermissions = new PermissionTemplateDto().setUuid("test_template");
     underTest = mock(PermissionTemplateDao.class);
@@ -245,8 +243,6 @@ public class PermissionTemplateDaoTest {
 
   @Test
   public void should_fail_on_unmatched_template() {
-    db.truncateTables();
-
     expectedException.expect(IllegalArgumentException.class);
 
     underTest.selectPermissionTemplateWithPermissions(db.getSession(), "unmatched");

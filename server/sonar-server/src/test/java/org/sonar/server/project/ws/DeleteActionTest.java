@@ -123,7 +123,6 @@ public class DeleteActionTest {
         dbClient,
         userSessionRule)));
     userSessionRule.login("login").setGlobalPermissions(UserRole.ADMIN);
-    db.truncateTables();
     es.truncateIndices();
   }
 

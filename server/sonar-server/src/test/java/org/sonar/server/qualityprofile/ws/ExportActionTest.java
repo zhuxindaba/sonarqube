@@ -84,8 +84,6 @@ public class ExportActionTest {
     session = dbClient.openSession(false);
     backuper = mock(QProfileBackuper.class);
 
-    db.truncateTables();
-
     ProfileExporter exporter1 = newExporter("polop");
     ProfileExporter exporter2 = newExporter("palap");
 

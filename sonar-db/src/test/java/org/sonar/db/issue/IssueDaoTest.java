@@ -198,8 +198,6 @@ public class IssueDaoTest {
 
   @Test
   public void insert() {
-    dbTester.truncateTables();
-
     IssueDto dto = new IssueDto();
     dto.setComponent(new ComponentDto().setKey("struts:Action").setId(123L).setUuid("component-uuid"));
     dto.setProject(new ComponentDto().setKey("struts").setId(100L).setUuid("project-uuid"));

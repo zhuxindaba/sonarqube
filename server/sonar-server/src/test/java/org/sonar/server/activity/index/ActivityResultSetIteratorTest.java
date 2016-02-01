@@ -39,11 +39,6 @@ public class ActivityResultSetIteratorTest {
   @Rule
   public DbTester dbTester = DbTester.create(System2.INSTANCE);
 
-  @Before
-  public void setUp() {
-    dbTester.truncateTables();
-  }
-
   /**
    * Iterate over two rows in table.
    */

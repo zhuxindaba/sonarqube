@@ -50,7 +50,6 @@ public class CustomMeasureDaoTest {
   public void setUp() {
     session = db.getSession();
     underTest = new CustomMeasureDao();
-    db.truncateTables();
   }
 
   @Test

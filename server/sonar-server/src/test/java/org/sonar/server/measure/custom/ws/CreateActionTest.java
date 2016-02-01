@@ -105,7 +105,6 @@ public class CreateActionTest {
   public void setUp() {
     ws = new WsTester(new CustomMeasuresWs(new CreateAction(dbClient, userSession, System2.INSTANCE, new CustomMeasureValidator(newFullTypeValidations()),
       new CustomMeasureJsonWriter(new UserJsonWriter(userSession)), new UserIndex(es.client()), new ComponentFinder(dbClient))));
-    db.truncateTables();
     userSession.login("login").setGlobalPermissions(GlobalPermissions.SYSTEM_ADMIN);
   }
 

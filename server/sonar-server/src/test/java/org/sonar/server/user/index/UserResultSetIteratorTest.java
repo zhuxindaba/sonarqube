@@ -38,11 +38,6 @@ public class UserResultSetIteratorTest {
   @Rule
   public DbTester dbTester = DbTester.create(System2.INSTANCE);
 
-  @Before
-  public void setUp() {
-    dbTester.truncateTables();
-  }
-
   @Test
   public void iterator_over_users() {
     dbTester.prepareDbUnit(getClass(), "shared.xml");

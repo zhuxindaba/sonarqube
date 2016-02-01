@@ -173,8 +173,6 @@ public class CharacteristicDaoTest {
 
   @Test
   public void insert_characteristic() {
-    db.truncateTables();
-
     CharacteristicDto dto = new CharacteristicDto()
       .setKey("COMPILER_RELATED_PORTABILITY")
       .setName("Compiler related portability")
@@ -190,8 +188,6 @@ public class CharacteristicDaoTest {
 
   @Test
   public void insert_characteristics() {
-    db.truncateTables();
-
     dao.insert(db.getSession(), new CharacteristicDto()
         .setKey("COMPILER_RELATED_PORTABILITY")
         .setName("Compiler related portability")

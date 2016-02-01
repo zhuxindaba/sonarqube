@@ -55,8 +55,6 @@ public class PurgeCommandsTest {
    */
   @Test
   public void should_not_fail_when_deleting_huge_number_of_snapshots() {
-    dbTester.truncateTables();
-
     new PurgeCommands(dbTester.getSession(), profiler).deleteSnapshots(getHugeNumberOfIds());
     // The goal of this test is only to check that the query do no fail, not to check result
   }
@@ -87,8 +85,6 @@ public class PurgeCommandsTest {
    */
   @Test
   public void should_not_fail_when_purging_huge_number_of_snapshots() {
-    dbTester.truncateTables();
-
     new PurgeCommands(dbTester.getSession(), profiler).purgeSnapshots(getHugeNumberOfIds());
     // The goal of this test is only to check that the query do no fail, not to check result
   }
@@ -112,7 +108,6 @@ public class PurgeCommandsTest {
    */
   @Test
   public void should_not_fail_when_deleting_huge_number_of_resources() {
-    dbTester.truncateTables();
     new PurgeCommands(dbTester.getSession(), profiler).deleteComponents(getHugeNumberOfIdUuids());
     // The goal of this test is only to check that the query do no fail, not to check result
   }

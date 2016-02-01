@@ -49,11 +49,6 @@ public class IssueResultSetIteratorTest {
     });
   }
 
-  @Before
-  public void setUp() {
-    dbTester.truncateTables();
-  }
-
   @Test
   public void iterator_over_one_issue() {
     dbTester.prepareDbUnit(getClass(), "one_issue.xml");

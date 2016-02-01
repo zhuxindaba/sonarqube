@@ -62,7 +62,6 @@ public class ListActionTest {
 
   @Before
   public void setUp() {
-    db.truncateTables();
     es.truncateIndices();
     testIndex = new TestIndex(es.client());
 

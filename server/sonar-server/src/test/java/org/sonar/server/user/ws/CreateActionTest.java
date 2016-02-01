@@ -86,7 +86,6 @@ public class CreateActionTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     esTester.truncateIndices();
 
     System2 system2 = new System2();

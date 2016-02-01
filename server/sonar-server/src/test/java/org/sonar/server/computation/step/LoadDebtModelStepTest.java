@@ -52,7 +52,6 @@ public class LoadDebtModelStepTest extends BaseStepTest {
 
   @Before
   public void setUp() {
-    dbTester.truncateTables();
     dbSession = dbClient.openSession(false);
 
     underTest = new LoadDebtModelStep(dbClient, debtModelHolder);

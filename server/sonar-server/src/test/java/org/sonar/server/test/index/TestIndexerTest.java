@@ -72,7 +72,6 @@ public class TestIndexerTest {
   @Before
   public void setUp() {
     es.truncateIndices();
-    db.truncateTables();
     underTest = new TestIndexer(db.getDbClient(), es.client());
     underTest.setEnabled(true);
   }
