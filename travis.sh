@@ -4,7 +4,7 @@ set -euo pipefail
 
 function configureTravis {
   mkdir ~/.local
-  curl -sSL https://github.com/SonarSource/travis-utils/tarball/abdae8d8cefe45f24998953f774b5d8c33d72b77 | tar zx --strip-components 1 -C ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/4eb0d944cb5128809cf8847456fb4c1fc8a4c483 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
 configureTravis
