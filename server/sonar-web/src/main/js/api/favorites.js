@@ -17,15 +17,16 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+ /* @flow */
 import { post, requestDelete } from '../helpers/request';
 
-export function addFavorite (componentKey) {
+export function addFavorite (componentKey: string) {
   const url = '/api/favourites';
   const data = { key: componentKey };
   return post(url, data);
 }
 
-export function removeFavorite (componentKey) {
+export function removeFavorite (componentKey: string) {
   const url = '/api/favourites/' + encodeURIComponent(componentKey);
   return requestDelete(url);
 }
