@@ -19,6 +19,7 @@
  */
 package org.sonar.server.authentication;
 
+import java.util.List;
 import org.sonar.core.platform.Module;
 import org.sonar.server.authentication.ws.AuthenticationWs;
 import org.sonar.server.authentication.ws.LoginAction;
@@ -44,6 +45,12 @@ public class AuthenticationModule extends Module {
       CredentialsAuthenticator.class,
       RealmAuthenticator.class,
       BasicAuthenticator.class,
-      ValidateAction.class);
+      ValidateAction.class,
+      SsoAuthenticator.class);
+    add(toArray(SsoAuthenticator.definitions()));
+  }
+
+  private static Object[] toArray(List<?> list) {
+    return list.toArray(new Object[list.size()]);
   }
 }
